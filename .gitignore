@@ -2,3 +2,5 @@ venv/
 packages/
 packages.zip
 .env
+__pycache__/
+listings.json

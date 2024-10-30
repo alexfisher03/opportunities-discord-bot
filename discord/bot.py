@@ -1,13 +1,19 @@
+import asyncio
 import discord
+from discord.ext import commands
 
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-class Client(discord.Client):
-    pass
 
 intents = discord.Intents.default()
+bot = commands.Bot(command_prefix="", intents=intents)
 
-client = Client(intents=intents)
-client.run(os.getenv("BOT_TOKEN"))
+
+async def main():
+    await bot.load_extension("post_listings")
+    await bot.start(os.getenv("BOT_TOKEN"))
+
+if __name__ == "__main__":
+    asyncio.run(main())
