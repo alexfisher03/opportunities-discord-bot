@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 
 import util
 
+from datetime import datetime
+
 # UTC time when listings should be posted
 times = [datetime.time(hour=12, minute=0, second=0)]
 
@@ -48,8 +50,16 @@ async def post_formatted_listing(listing, bot, channel):
 
     embed.add_field(
         name="Active", value="✅" if listing["active"] else "❌", inline=False)
+    
+    today = datetime.now().strftime("%A, %B %d, %Y")
 
-    await bot.get_channel(channel).send(content=f"# {listing['title']}", embed=embed, files=[acm_logo])
+    await bot.get_channel(channel).create_thread(
+        name=today,
+        content=f"# {listing['title']}", 
+        embed=embed, 
+        files=[acm_logo]
+        applied_tags=[]
+        )
 
 
 class PostListings(commands.Cog):
