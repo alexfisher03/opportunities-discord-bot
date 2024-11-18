@@ -81,15 +81,41 @@ class PostListings(commands.Cog):
 
         # Create the message content
         # TODO: Split content into separate messages if length too large
-        content = ""
+        embeds = []
         for listing in listings:
-            # Format each listing
-            content += f"# {listing['title']} at {listing['company_name']}\n"
-            content += f"**Locations:** {' '.join([f'`{l}`' for l in listing['locations']])}\n"
-            content += f"**Terms:** {' '.join([f'`{t}`' for t in listing['terms']])}\n"
-            content += f"**Sponsorship:** {listing['sponsorship']}\n"
-            content += f"**Active:** {'✅' if listing['active'] else '❌'}\n" # should always be active, is this unnecessary?
-            content += f"**Link:** {listing['url']}\n\n"
+            # Create an embed for each listing
+            embed = Embed(
+                title=listing["title"],
+                colour=Colour(0x5865f2),
+                url=listing["url"],
+                timestamp=datetime.fromtimestamp(listing["date_updated"]),
+            )
+            embed.set_author(
+                name=listing["company_name"],
+                url=listing.get("company_url"),
+            )
+            embed.add_field(
+                name="Locations 📌",
+                value=" ".join([f"`{location}`" for location in listing["locations"]]),
+                inline=False,
+            )
+            embed.add_field(
+                name="Terms 🔎",
+                value=" ".join([f"`{term}`" for term in listing["terms"]]),
+                inline=False,
+            )
+            embed.add_field(
+                name="Sponsorship",
+                value=listing["sponsorship"],
+                inline=False,
+            )
+            embed.add_field(
+                name="Active",
+                value="✅" if listing["active"] else "❌",
+                inline=False,
+            )
+            embeds.append(embed)
+
 
         # Determine the season and format the thread title
         if 8 <= month <= 12:
