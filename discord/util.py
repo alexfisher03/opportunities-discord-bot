@@ -7,12 +7,18 @@ import json
 from datetime import datetime
 
 
-# TODO: instead of getting listings from JSON, get from S3 bucket
-# NOTE: Need to have listings.json file in same directory
-def getListingsFromJSON(filename="listings.json"):
+# TODO: instead of getting data from JSON, get from S3 bucket
+# NOTE: Need to have json files in same directory
+def getDataFromJSON(filename):
     with open(filename) as f:
         listings = json.load(f)
         return listings
+
+# TODO: instead of saving data to JSON, save to S3 bucket
+# NOTE: Creates json file in same directory
+def saveDataToJSON(filename, data):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=4)
 
 
 def sortListings(listings):

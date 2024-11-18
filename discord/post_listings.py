@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands, tasks
 
 import datetime
-from datetime import datetime
+from datetime import datetime, time
 
 import requests
 from bs4 import BeautifulSoup
@@ -12,7 +12,9 @@ import util
 from datetime import datetime
 
 # UTC time when listings should be posted
-times = [datetime.time(hour=12, minute=0, second=0)]
+times = [time(hour=12, minute=0, second=0)]
+
+
 
 # Posts a formatted message of the listing
 async def post_formatted_listing(listing, bot, channel):
@@ -73,7 +75,7 @@ class PostListings(commands.Cog):
     @tasks.loop(time=times)
     async def post_listings(self):
         # Get summer listings
-        listings = util.getListingsFromJSON()
+        listings = util.getListingsFromJSON("listings.json")
 
         util.sortListings(listings)
 
