@@ -3,22 +3,28 @@ See
     https://github.com/SimplifyJobs/Summer2025-Internships/blob/dev/.github/README-scripts.md
     Based on https://github.com/SimplifyJobs/Summer2025-Internships/blob/dev/.github/scripts/util.py
 """
-import json
 from datetime import datetime
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-# TODO: instead of getting data from JSON, get from S3 bucket
-# NOTE: Need to have json files in same directory
+import boto3
+import json
+
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
+AWS_SECRET = os.getenv("AWS_SECRET")
+
+s3 = boto3.client("s3", aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET)
+bucket_name = "acm-github-data"
+
+
 def getDataFromJSON(filename):
-    with open(filename) as f:
-        listings = json.load(f)
-        return listings
+    response = s3.get_object(Bucket=bucket_name, Key=filename)
+    return json.loads(response['Body'].read().decode('utf-8'))
 
-# TODO: instead of saving data to JSON, save to S3 bucket
-# NOTE: Creates json file in same directory
 def saveDataToJSON(filename, data):
-    with open(filename, 'w') as f:
-        json.dump(data, f, indent=4)
+    s3.put_object(Body=data, Bucket=bucket_name, Key=filename)
 
 
 def sortListings(listings):

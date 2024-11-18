@@ -20,6 +20,7 @@ async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
 
 async def main():
+    await bot.load_extension("setup")
     await bot.load_extension("post_listings")
     await bot.start(os.getenv("BOT_TOKEN"))
 
