@@ -7,7 +7,7 @@ import util
 
 import os
 
-TEST_MODE = True  # Set to False in production
+TEST_MODE = os.getenv("TEST_MODE") == "True"
 FORUM_CHANNEL_ID = int(os.getenv("FORUM_ID", 0))
 
 
