@@ -3,4 +3,4 @@ packages/
 packages.zip
 .env
 __pycache__/
-listings.json
+*.json
