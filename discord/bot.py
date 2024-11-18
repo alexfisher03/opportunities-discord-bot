@@ -26,6 +26,7 @@ async def on_ready():
             print('Could not connect to ACMConnect bot user. Make sure the token is valid.')
 
 async def main():
+    await bot.load_extension("setup")
     await bot.load_extension("post_listings")
     await bot.start(os.getenv("BOT_TOKEN"))
 
