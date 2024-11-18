@@ -61,24 +61,37 @@ class PostListings(commands.Cog):
             # Get listings from JSON file
             listings = util.getDataFromJSON("listings.json")
             util.sortListings(listings)
+            
+            # Sort listings for those only appearing since the day prior
+            now = datetime.now()
+            yesterday = now - timedelta(days=1)
+            yesterday_midnight = datetime(yesterday.year, yesterday.month, yesterday.day, 0, 0, 0)
+            listings = util.filterSummer(listings, str(yesterday.year + 1), earliest_date=int(yesterday_midnight.timestamp()))
+        
+        # Log no listings received for that day
+        now = datetime.now()
+        month = now.month
+        month_name = now.strftime("%B")  # Full month name
+        day = now.day
+        year_short = now.strftime("%y")  # Last two digits of the year
+        
+        if len(listings) == 0:
+            print(f"No listings posted on {month_name} {day}")
+            return
 
         # Create the message content
+        # TODO: Split content into separate messages if length too large
         content = ""
         for listing in listings:
             # Format each listing
-            content += f"**{listing['title']}** at **{listing['company_name']}**\n"
-            content += f"Locations: {', '.join(listing['locations'])}\n"
-            content += f"Terms: {', '.join(listing['terms'])}\n"
-            content += f"Sponsorship: {listing['sponsorship']}\n"
-            content += f"Active: {'✅' if listing['active'] else '❌'}\n"
-            content += f"Link: {listing['url']}\n\n"
+            content += f"# {listing['title']} at {listing['company_name']}\n"
+            content += f"**Locations:** {' '.join([f'`{l}`' for l in listing['locations']])}\n"
+            content += f"**Terms:** {' '.join([f'`{t}`' for t in listing['terms']])}\n"
+            content += f"**Sponsorship:** {listing['sponsorship']}\n"
+            content += f"**Active:** {'✅' if listing['active'] else '❌'}\n" # should always be active, is this unnecessary?
+            content += f"**Link:** {listing['url']}\n\n"
 
         # Determine the season and format the thread title
-        now = datetime.now()
-        month = now.month
-        day = now.day
-        year_short = now.strftime("%y")  # Last two digits of the year
-
         if 8 <= month <= 12:
             season = "FALL"
         elif 1 <= month <= 5:
