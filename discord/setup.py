@@ -102,6 +102,13 @@ class Setup(commands.Cog):
                 existing_guild.update(guild_data)
                 break
         saveDataToJSON("guilds.json", existing_guilds)
+    
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        # Remove guild from guilds.json
+        existing_guilds = getDataFromJSON("guilds.json")
+        updated_guilds = [g for g in existing_guilds if g['id'] != guild.id]
+        saveDataToJSON("guilds.json", updated_guilds)
 
 
 async def setup(bot):
