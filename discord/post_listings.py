@@ -2,6 +2,8 @@ from discord.ext import commands, tasks
 
 from datetime import datetime, time, timezone, timedelta
 
+from asyncio import TimeoutError, wait_for
+
 import os
 import util
 
@@ -79,17 +81,36 @@ class PostListings(commands.Cog):
             print(f"No listings posted on {month_name} {day}")
             return
 
+
+        
+        #create messages list so the split content is smooth
+        messages = []
+        MESSAGE_LIMIT = 2000
         # Create the message content
         # TODO: Split content into separate messages if length too large
         content = ""
         for listing in listings:
+            temp_content = ""
             # Format each listing
-            content += f"# {listing['title']} at {listing['company_name']}\n"
-            content += f"**Locations:** {' '.join([f'`{l}`' for l in listing['locations']])}\n"
-            content += f"**Terms:** {' '.join([f'`{t}`' for t in listing['terms']])}\n"
-            content += f"**Sponsorship:** {listing['sponsorship']}\n"
-            content += f"**Active:** {'✅' if listing['active'] else '❌'}\n" # should always be active, is this unnecessary?
-            content += f"**Link:** {listing['url']}\n\n"
+            temp_content += f"# {listing['title']} at {listing['company_name']}\n"
+            temp_content += f"**Locations:** {' '.join([f'`{l}`' for l in listing['locations']])}\n"
+            temp_content += f"**Terms:** {' '.join([f'`{t}`' for t in listing['terms']])}\n"
+            temp_content += f"**Sponsorship:** {listing['sponsorship']}\n"
+            temp_content += f"**Link:** {listing['url']}\n\n" 
+
+            if len(content) + len(temp_content) > MESSAGE_LIMIT:
+                messages.append(content)
+                content = temp_content
+
+            else:
+                content += temp_content
+
+        #checks to see if there is content remaining
+        if content.strip():
+            messages.append(content)
+
+
+
 
         # Determine the season and format the thread title
         if 8 <= month <= 12:
@@ -103,18 +124,33 @@ class PostListings(commands.Cog):
 
         thread_title = f"{season} {year_short}: {month_name} {day}"
 
+
+
         # Post the message in each guild's forum channel as a new thread
         existing_guilds = util.getDataFromJSON("guilds.json")
         for guild in existing_guilds:
             forum_channel = self.bot.get_channel(guild['channel'])
+
+            # Create the thread
+            try:
+                thread = await forum_channel.create_thread(
+                    name=thread_title,
+                    content=messages[0]  # Use the first message to create the thread
+                )
+            except Exception as e:
+                print(f"Failed to create thread: {e}")
+                return
             
-            # Create a new thread with the formatted title
-            await forum_channel.create_thread(
-                name=thread_title,
-                content=content
-            )
-        
-        # Log number of listings posted in number of guilds
+            await asyncio.sleep(1)  # Add a 1-second delay between messages
+
+            # Post the rest of the messages in the thread
+            for msg in messages[1:]:
+                try:
+                    await thread.send(msg)
+                except Exception as e:
+                    print(f"Failed to send message in thread {thread.name}: {e}")           
+             
+         # Log number of listings posted in number of guilds
         print(f"Posted {len(listings)} listings in {len(existing_guilds)} guilds on {month_name} {day}")
         
         if TEST_MODE:
