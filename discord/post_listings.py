@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands, tasks
 from datetime import datetime, time
+import requests
+from bs4 import BeautifulSoup
 import os
 import util
 
@@ -21,7 +23,7 @@ class PostListings(commands.Cog):
         print("Unloading cog. Stopping post_listings loop.")
         self.post_listings.cancel()
 
-    @tasks.loop(time=times) if not TEST_MODE else tasks.loop(minutes=1)
+    @tasks.loop(time=times) if not TEST_MODE else tasks.loop(seconds=1)
     async def post_listings(self):
         """Posts job listings to the specified channel."""
         if TEST_MODE and self.posted_today:
@@ -209,7 +211,8 @@ class PostListings(commands.Cog):
         util.sortListings(listings)
         today = datetime.now()
         yesterday_midnight = datetime(today.year, today.month, today.day)
-        listings = util.filterSummer(listings, "2025", earliest_date=int(yesterday_midnight.timestamp()))
+        earliest_date = int(yesterday_midnight.timestamp()) if not TEST_MODE else 0
+        listings = util.filterSummer(listings, "2025", earliest_date=earliest_date)
 
         if not listings:
             print("No listings to post.")
@@ -295,12 +298,15 @@ class PostListings(commands.Cog):
         embed.add_field(name="Locations", value=", ".join(listing["locations"]), inline=False)
         embed.add_field(name="Terms", value=", ".join(listing["terms"]), inline=False)
         embed.add_field(name="Sponsorship", value=listing["sponsorship"], inline=True)
-        embed.add_field(name="Active", value="✅" if listing["active"] else "❌", inline=True)
 
         # Set author with company name and URL
         if listing["company_url"]:
             embed.set_author(name=listing["company_name"], url=listing["company_url"])
-
+            
+            # Set thumbnail with company logo
+            company_logo = self.get_company_logo(listing)
+            embed.set_thumbnail(url=company_logo)
+        
         # Set footer with logo and last updated timestamp
         acm_logo_path = "acm_logo.png"
         embed.set_footer(
@@ -308,6 +314,31 @@ class PostListings(commands.Cog):
             icon_url=f"attachment://{acm_logo_path}"
         )
         return embed
+
+
+    def get_company_logo(self, listing):
+        """Gets the company logo for a listing"""
+        # Check if company logo is already saved
+        companies = util.getDataFromJSON("companies.json")
+        for company in companies:
+            if company['name'] == listing['company_name']:
+                return company['logo_url']
+
+        # Create request to Simplify company page, and scrape company logo
+        if not listing['company_url'].startswith('https://simplify.jobs/c/'):
+            return None
+        
+        soup = BeautifulSoup(requests.get(listing["company_url"]).text, 'html.parser')
+        img = soup.find(name='img', attrs={'alt': listing['company_name']})
+        company_logo = img['src']
+        company = {
+            'name': listing['company_name'],
+            'logo_url': company_logo
+        }
+        companies.append(company)
+        util.saveDataToJSON("companies.json", companies)
+        
+        return company_logo
 
 
     def generate_thread_title(self, today):

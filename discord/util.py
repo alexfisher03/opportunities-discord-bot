@@ -24,7 +24,7 @@ def getDataFromJSON(filename):
     return json.loads(response['Body'].read().decode('utf-8'))
 
 def saveDataToJSON(filename, data):
-    s3.put_object(Body=data, Bucket=bucket_name, Key=filename)
+    s3.put_object(Body=json.dumps(data), Bucket=bucket_name, Key=filename)
 
 
 def sortListings(listings):
