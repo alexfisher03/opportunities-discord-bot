@@ -15,13 +15,18 @@ import json
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
 AWS_SECRET = os.getenv("AWS_SECRET")
 
-s3 = boto3.client("s3", aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET)
+s3 = boto3.client("s3",region_name = "us-east-2", aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET)
 bucket_name = "acm-github-data"
 
 
 def getDataFromJSON(filename):
-    response = s3.get_object(Bucket=bucket_name, Key=filename)
-    return json.loads(response['Body'].read().decode('utf-8'))
+    try:
+        response = s3.get_object(Bucket=bucket_name, Key=filename)
+        data = response['Body'].read().decode('utf-8')
+        return json.loads(data)
+    except Exception as e:
+        print(f"Error retrieving {filename} from S3: {e}")
+        return None 
 
 def saveDataToJSON(filename, data):
     s3.put_object(Body=json.dumps(data), Bucket=bucket_name, Key=filename)

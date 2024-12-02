@@ -4,10 +4,14 @@ from datetime import datetime, time
 import requests
 from bs4 import BeautifulSoup
 import os
+from dotenv import load_dotenv
 import util
 
 # Set TEST_MODE to True for testing (loads dummy data)
+load_dotenv()
 TEST_MODE = os.getenv("TEST_MODE") == "True"
+
+
 
 # Define times for the loop (use 12:00 UTC daily for production)
 times = [time(hour=12, minute=0, second=0)] if not TEST_MODE else None
@@ -23,7 +27,8 @@ class PostListings(commands.Cog):
         print("Unloading cog. Stopping post_listings loop.")
         self.post_listings.cancel()
 
-    @tasks.loop(time=times) if not TEST_MODE else tasks.loop(seconds=1)
+
+    @tasks.loop(time=times) if not TEST_MODE else tasks.loop(seconds = 5)
     async def post_listings(self):
         """Posts job listings to the specified channel."""
         if TEST_MODE and self.posted_today:
@@ -217,40 +222,43 @@ class PostListings(commands.Cog):
         if not listings:
             print("No listings to post.")
             return
-
         # Prepare embeds
         embeds = []
         for listing in listings:
             embed = self.create_embed(listing)
             embeds.append(embed)
 
-        # Post embeds in batches within the same thread
-        forum_channel_id = int(os.getenv("FORUM_CHANNEL_ID"))
-        forum_channel = self.bot.get_channel(forum_channel_id)
+        print("getting guilds")
+        existing_guilds = util.getDataDromJSON("guilds.json")
+        print(existing_guilds)
 
-        if not forum_channel:
-            print(f"Forum channel with ID {forum_channel_id} not found or inaccessible.")
-            return
+        for guild in existing_guilds:
 
-        # Determine the thread title based on the season
-        thread_title = self.generate_thread_title(today)
+            forum_channel = self.bot.get_channel(guild['channel'])
 
-        try:
-            thread_with_message = await forum_channel.create_thread(
-                name=thread_title,
-                content=f"Job listings for {thread_title}:"
-            )
-            thread = thread_with_message.thread  # Extract the thread object
-            print(f"Thread created: {thread.jump_url}")
+            if not forum_channel:
+                print(f"Forum channel with ID {forum_channel_id} not found or inaccessible.")
+                return
 
-            # Send batches in the same thread
-            await self.send_batches_in_thread(thread, embeds)
+            # Determine the thread title based on the season
+            thread_title = self.generate_thread_title(today)
 
-        except Exception as e:
-            print(f"Error creating thread or posting messages: {e}")
+            try:
+                thread_with_message = await forum_channel.create_thread(
+                    name=thread_title,
+                    content=f"Job listings for {thread_title}:"
+                )
+                thread = thread_with_message.thread  # Extract the thread object
+                print(f"Thread created: {thread.jump_url}")
 
-        if TEST_MODE:
-            self.posted_today = True
+                # Send batches in the same thread
+                await self.send_batches_in_thread(thread, embeds)
+
+            except Exception as e:
+                print(f"Error creating thread or posting messages: {e}")
+
+            if TEST_MODE:
+                self.posted_today = True
 
     async def send_batches_in_thread(self, thread, embeds):
         """Send embeds in batches within the same thread."""
