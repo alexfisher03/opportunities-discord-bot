@@ -34,28 +34,171 @@ class PostListings(commands.Cog):
         if TEST_MODE:
             listings = [
                 {
-                    "title": "Software Engineer Intern",
-                    "company_name": "Acme Corp",
-                    "company_url": "https://www.acme.com",
-                    "url": "https://www.acme.com/jobs/123",
+                    "title": "Frontend Developer Intern",
+                    "company_name": "TechWave",
+                    "company_url": "https://www.techwave.com",
+                    "url": "https://www.techwave.com/jobs/frontend-dev",
                     "date_posted": datetime.now().timestamp(),
                     "date_updated": datetime.now().timestamp(),
-                    "locations": ["San Francisco, CA", "Remote"],
+                    "locations": ["Austin, TX", "Remote"],
                     "terms": ["Summer 2025"],
                     "sponsorship": "Yes",
                     "active": True,
                     "is_visible": True,
                 },
                 {
-                    "title": "Data Analyst Intern",
-                    "company_name": "Data Inc.",
-                    "company_url": "https://www.datainc.com",
-                    "url": "https://www.datainc.com/jobs/456",
+                    "title": "Backend Developer Intern",
+                    "company_name": "CodeLabs",
+                    "company_url": "https://www.codelabs.com",
+                    "url": "https://www.codelabs.com/jobs/backend-dev",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Seattle, WA", "Remote"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "No",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Machine Learning Intern",
+                    "company_name": "DataMind",
+                    "company_url": "https://www.datamind.com",
+                    "url": "https://www.datamind.com/jobs/ml-intern",
                     "date_posted": datetime.now().timestamp(),
                     "date_updated": datetime.now().timestamp(),
                     "locations": ["New York, NY"],
                     "terms": ["Summer 2025"],
+                    "sponsorship": "Yes",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Game Developer Intern",
+                    "company_name": "PixelWorks",
+                    "company_url": "https://www.pixelworks.com",
+                    "url": "https://www.pixelworks.com/jobs/game-dev",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Los Angeles, CA"],
+                    "terms": ["Summer 2025"],
                     "sponsorship": "No",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Full Stack Engineer Intern",
+                    "company_name": "InnovateX",
+                    "company_url": "https://www.innovatex.com",
+                    "url": "https://www.innovatex.com/jobs/fullstack-intern",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["San Francisco, CA"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "Yes",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Cloud Computing Intern",
+                    "company_name": "Cloudify",
+                    "company_url": "https://www.cloudify.com",
+                    "url": "https://www.cloudify.com/jobs/cloud-intern",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Remote"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "No",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Cybersecurity Intern",
+                    "company_name": "SecureTech",
+                    "company_url": "https://www.securetech.com",
+                    "url": "https://www.securetech.com/jobs/cyber-intern",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Boston, MA"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "Yes",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Mobile App Developer Intern",
+                    "company_name": "Appify",
+                    "company_url": "https://www.appify.com",
+                    "url": "https://www.appify.com/jobs/mobile-dev",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Remote", "Chicago, IL"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "No",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Data Analyst Intern",
+                    "company_name": "DataWorks",
+                    "company_url": "https://www.dataworks.com",
+                    "url": "https://www.dataworks.com/jobs/data-analyst",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Atlanta, GA"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "Yes",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Blockchain Developer Intern",
+                    "company_name": "CryptoBuilders",
+                    "company_url": "https://www.cryptobuilders.com",
+                    "url": "https://www.cryptobuilders.com/jobs/blockchain-dev",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Miami, FL"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "No",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "DevOps Engineer Intern",
+                    "company_name": "CloudOps",
+                    "company_url": "https://www.cloudops.com",
+                    "url": "https://www.cloudops.com/jobs/devops-intern",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Seattle, WA"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "Yes",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "AI Research Intern",
+                    "company_name": "BrainAI",
+                    "company_url": "https://www.brainai.com",
+                    "url": "https://www.brainai.com/jobs/ai-research",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Remote"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "No",
+                    "active": True,
+                    "is_visible": True,
+                },
+                {
+                    "title": "Quality Assurance Engineer Intern",
+                    "company_name": "Testify",
+                    "company_url": "https://www.testify.com",
+                    "url": "https://www.testify.com/jobs/qa-engineer",
+                    "date_posted": datetime.now().timestamp(),
+                    "date_updated": datetime.now().timestamp(),
+                    "locations": ["Denver, CO"],
+                    "terms": ["Summer 2025"],
+                    "sponsorship": "Yes",
                     "active": True,
                     "is_visible": True,
                 },
@@ -78,7 +221,7 @@ class PostListings(commands.Cog):
             embed = self.create_embed(listing)
             embeds.append(embed)
 
-        # Post embeds in batches of 10
+        # Post embeds in batches within the same thread
         forum_channel_id = int(os.getenv("FORUM_CHANNEL_ID"))
         forum_channel = self.bot.get_channel(forum_channel_id)
 
@@ -86,25 +229,54 @@ class PostListings(commands.Cog):
             print(f"Forum channel with ID {forum_channel_id} not found or inaccessible.")
             return
 
-        thread_title = today.strftime("%A, %B %d, %Y")
+        # Determine the thread title based on the season
+        thread_title = self.generate_thread_title(today)
+
         try:
             thread_with_message = await forum_channel.create_thread(
                 name=thread_title,
                 content=f"Job listings for {thread_title}:"
             )
-            thread = thread_with_message.thread
+            thread = thread_with_message.thread  # Extract the thread object
             print(f"Thread created: {thread.jump_url}")
 
-            for i in range(0, len(embeds), 10):
-                embed_batch = embeds[i:i + 10]
-                await thread.send(embeds=embed_batch)
-                print(f"Sent {len(embed_batch)} embeds in a batch.")
+            # Send batches in the same thread
+            await self.send_batches_in_thread(thread, embeds)
 
         except Exception as e:
             print(f"Error creating thread or posting messages: {e}")
 
         if TEST_MODE:
             self.posted_today = True
+
+    async def send_batches_in_thread(self, thread, embeds):
+        """Send embeds in batches within the same thread."""
+        MAX_EMBEDS = 10
+        MAX_CHARACTERS = 2000
+        current_batch = []
+
+        def calculate_batch_size(embed_batch):
+            total_size = 0
+            for embed in embed_batch:
+                total_size += len(embed.title or "") + len(embed.description or "")
+                total_size += sum(len(field.name or "") + len(field.value or "") for field in embed.fields)
+                total_size += len(embed.footer.text or "") if embed.footer else 0
+            return total_size
+
+        for embed in embeds:
+            if len(current_batch) >= MAX_EMBEDS or calculate_batch_size(current_batch + [embed]) > MAX_CHARACTERS:
+                # Post the current batch in the same thread
+                await thread.send(embeds=current_batch)
+                print(f"Sent {len(current_batch)} embeds in a batch.")
+                current_batch = []
+
+            # Add the current embed to the batch
+            current_batch.append(embed)
+
+        # Post any remaining embeds
+        if current_batch:
+            await thread.send(embeds=current_batch)
+            print(f"Sent {len(current_batch)} embeds in the final batch.")
 
     def create_embed(self, listing):
         """Create a Discord Embed object for a job listing."""
@@ -125,6 +297,20 @@ class PostListings(commands.Cog):
 
         embed.set_footer(text="Last updated")
         return embed
+
+    def generate_thread_title(self, today):
+        """Generate a thread title based on the season and date."""
+        def get_season(month):
+            if 8 <= month <= 12:  # August to December
+                return "FALL"
+            elif 1 <= month <= 5:  # January to May
+                return "SPRING"
+            elif 6 <= month <= 7:  # June to July
+                return "SUMMER"
+            return "UNKNOWN"
+
+        season = get_season(today.month)
+        return f"{season} {today.year % 100}: {today.strftime('%B %d')}"
 
     @post_listings.before_loop
     async def before_post_listings(self):
