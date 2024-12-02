@@ -6,15 +6,19 @@ from bs4 import BeautifulSoup
 import os
 from dotenv import load_dotenv
 import util
+import datetime
+
 
 # Set TEST_MODE to True for testing (loads dummy data)
 load_dotenv()
 TEST_MODE = os.getenv("TEST_MODE") == "True"
+file = open("logging.txt","a")
+
 
 
 
 # Define times for the loop (use 12:00 UTC daily for production)
-times = [time(hour=12, minute=0, second=0)] if not TEST_MODE else None
+times = [time(hour=12, minute=0, second=0)]
 
 
 class PostListings(commands.Cog):
@@ -23,19 +27,27 @@ class PostListings(commands.Cog):
         self.posted_today = False  # Prevent multiple posts in TEST_MODE
         self.post_listings.start()
 
+
+    def log_message(self, message):
+        timestamp = datetime.datetime.now().strftime("[%m/%d|%H:%M:%S]")
+        print(f"{timestamp} {message}",file=file, flush = True)
+        print(f"{timestamp} {message}")
+
     def cog_unload(self):
         print("Unloading cog. Stopping post_listings loop.")
         self.post_listings.cancel()
+        file.close()
 
 
     @tasks.loop(time=times) if not TEST_MODE else tasks.loop(seconds = 5)
     async def post_listings(self):
         """Posts job listings to the specified channel."""
         if TEST_MODE and self.posted_today:
-            print("Skipping post: already posted today in TEST_MODE.")
+            self.log_message("Skipping post: already posted today in TEST_MODE.")
             return
 
-        print("Running post_listings loop...")
+        self.log_message("____Running post_listings loop____")
+        self.log_message("Test Mode is " + str(TEST_MODE))
 
         # Load data
         if TEST_MODE:
@@ -208,19 +220,23 @@ class PostListings(commands.Cog):
                     "sponsorship": "Yes",
                     "active": True,
                     "is_visible": True,
-                },
+                }
             ]
         else:
             listings = util.getDataFromJSON("listings.json")
 
-        util.sortListings(listings)
-        today = datetime.now()
-        yesterday_midnight = datetime(today.year, today.month, today.day)
-        earliest_date = int(yesterday_midnight.timestamp()) if not TEST_MODE else 0
-        listings = util.filterSummer(listings, "2025", earliest_date=earliest_date)
+        try:
+            print(listings)
+            util.sortListings(listings)
+            today = datetime.now()
+            yesterday_midnight = datetime(today.year, today.month, today.day)
+            earliest_date = int(yesterday_midnight.timestamp()) if not TEST_MODE else 0
+            listings = util.filterSummer(listings, "2025", earliest_date=earliest_date)
+        except Exception as e:
+            self.log_message("Error sorting listings! " + str(e))
 
         if not listings:
-            print("No listings to post.")
+            self.log_message("No listings to post.")
             return
         # Prepare embeds
         embeds = []
@@ -228,16 +244,16 @@ class PostListings(commands.Cog):
             embed = self.create_embed(listing)
             embeds.append(embed)
 
-        print("getting guilds")
-        existing_guilds = util.getDataDromJSON("guilds.json")
-        print(existing_guilds)
+        self.log_message("Posting in the following guilds...")
+        existing_guilds = util.getDataFromJSON("guilds.json")
+        self.log_message(existing_guilds)
 
         for guild in existing_guilds:
 
             forum_channel = self.bot.get_channel(guild['channel'])
 
             if not forum_channel:
-                print(f"Forum channel with ID {forum_channel_id} not found or inaccessible.")
+                self.log_message(f"Forum channel with ID {forum_channel_id} not found or inaccessible.")
                 return
 
             # Determine the thread title based on the season
@@ -249,16 +265,18 @@ class PostListings(commands.Cog):
                     content=f"Job listings for {thread_title}:"
                 )
                 thread = thread_with_message.thread  # Extract the thread object
-                print(f"Thread created: {thread.jump_url}")
+                self.log_message(f"Thread created: {thread.jump_url}")
 
                 # Send batches in the same thread
                 await self.send_batches_in_thread(thread, embeds)
 
             except Exception as e:
-                print(f"Error creating thread or posting messages: {e}")
+                self.log_message(f"Error creating thread or posting messages: {e}")
 
             if TEST_MODE:
                 self.posted_today = True
+
+
 
     async def send_batches_in_thread(self, thread, embeds):
         """Send embeds in batches within the same thread."""
@@ -279,7 +297,7 @@ class PostListings(commands.Cog):
                 # Post the current batch in the same thread
                 acm_logo = discord.File("acm_logo.png", filename="acm_logo.png")
                 await thread.send(embeds=current_batch, files=[acm_logo])
-                print(f"Sent {len(current_batch)} embeds in a batch.")
+                self.log_message(f"Sent {len(current_batch)} embeds in a batch.")
                 current_batch = []
 
             # Add the current embed to the batch
@@ -289,7 +307,7 @@ class PostListings(commands.Cog):
         if current_batch:
             acm_logo = discord.File("acm_logo.png", filename="acm_logo.png")
             await thread.send(embeds=current_batch, files=[acm_logo])
-            print(f"Sent {len(current_batch)} embeds in the final batch.")
+            self.log_message(f"Sent {len(current_batch)} embeds in the final batch.")
 
 
     def create_embed(self, listing):
@@ -365,9 +383,9 @@ class PostListings(commands.Cog):
 
     @post_listings.before_loop
     async def before_post_listings(self):
-        print("Waiting until bot is ready...")
+        self.log_message("Waiting until bot is ready...")
         await self.bot.wait_until_ready()
-        print("Bot is ready! Starting post_listings loop.")
+        self.log_message("Bot is ready! Starting post_listings loop.")
 
 
 async def setup(bot):
