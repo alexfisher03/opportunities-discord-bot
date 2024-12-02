@@ -261,12 +261,13 @@ class PostListings(commands.Cog):
                 total_size += len(embed.title or "") + len(embed.description or "")
                 total_size += sum(len(field.name or "") + len(field.value or "") for field in embed.fields)
                 total_size += len(embed.footer.text or "") if embed.footer else 0
-            return total_size
+                return total_size
 
         for embed in embeds:
             if len(current_batch) >= MAX_EMBEDS or calculate_batch_size(current_batch + [embed]) > MAX_CHARACTERS:
                 # Post the current batch in the same thread
-                await thread.send(embeds=current_batch)
+                acm_logo = discord.File("acm_logo.png", filename="acm_logo.png")
+                await thread.send(embeds=current_batch, files=[acm_logo])
                 print(f"Sent {len(current_batch)} embeds in a batch.")
                 current_batch = []
 
@@ -275,28 +276,39 @@ class PostListings(commands.Cog):
 
         # Post any remaining embeds
         if current_batch:
-            await thread.send(embeds=current_batch)
+            acm_logo = discord.File("acm_logo.png", filename="acm_logo.png")
+            await thread.send(embeds=current_batch, files=[acm_logo])
             print(f"Sent {len(current_batch)} embeds in the final batch.")
+
 
     def create_embed(self, listing):
         """Create a Discord Embed object for a job listing."""
+        # Purple embed color
         embed = discord.Embed(
             title=listing["title"],
             url=listing["url"],
             description=f"Posted by **{listing['company_name']}**",
-            color=discord.Color.blue(),
+            color=0x5865f2,
             timestamp=datetime.fromtimestamp(listing["date_updated"])
         )
+        # Add fields for job details
         embed.add_field(name="Locations", value=", ".join(listing["locations"]), inline=False)
         embed.add_field(name="Terms", value=", ".join(listing["terms"]), inline=False)
         embed.add_field(name="Sponsorship", value=listing["sponsorship"], inline=True)
         embed.add_field(name="Active", value="✅" if listing["active"] else "❌", inline=True)
 
+        # Set author with company name and URL
         if listing["company_url"]:
             embed.set_author(name=listing["company_name"], url=listing["company_url"])
 
-        embed.set_footer(text="Last updated")
+        # Set footer with logo and last updated timestamp
+        acm_logo_path = "acm_logo.png"
+        embed.set_footer(
+            text=f"Last updated • {datetime.fromtimestamp(listing['date_updated']).strftime('%m/%d/%Y %I:%M %p')}",
+            icon_url=f"attachment://{acm_logo_path}"
+        )
         return embed
+
 
     def generate_thread_title(self, today):
         """Generate a thread title based on the season and date."""
