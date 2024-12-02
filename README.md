@@ -1,4 +1,4 @@
-#ACM Connect - Opportunities and Events Discord Bot
+# ACM Connect - Opportunities and Events Discord Bot
 
 **Overview**
     - ACM Connect is a Discord bot that takes active internship opportunity listings and posts them daily in any Discord server. Users can invite the bot to their server, and it will create a forum in which it will log internship listings from Simplify's Summer Internship repository. New listings are posted once daily, at 12:00:00 UTC. 
