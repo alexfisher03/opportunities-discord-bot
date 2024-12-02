@@ -1,17 +1,14 @@
-# opportunities-discord-bot
-Property of UF ACM. Designated to be built by the ACM Design Team in Fall 2024.
+- **Overview**
+    - ACM Connect is a Discord bot that takes active internship opportunity listings and posts them daily in any Discord server. Users can invite the bot to their server, and it will create a forum in which it will log internship listings from Simplify's Summer Internship repository. New listings are posted once daily, at 12:00:00 UTC. 
+    - ACM Connect uses an AWS S3 bucket to store Simplify listings and an AWS lambda function to retrieve new listings from Simplify as soon as they are posted. Once daily, at 00:00:00 EST, the lambda function scrapes the new simplify listings for its respective day, formats them, and sends them to the S3 bucket. The bot scripts will then post all new listings for the current day at 12:00:00 UTC.
+ 
+Tech Stack:
+  - AWS
+    - EC2 Instance
+    - S3 Bucket
+    - Lambda Function
+  - Python
+    - Discord.py
 
-# Getting Started
-- Clone Repository
-- Create a virtual environment to install discord, dotenv, etc. : python3 -m venv ./.venv
-- Change directory into the virtual environment: cd .venv
-- Activate the virtual environment: source bin/activate
-- Install discord.py: python3 -m pip install discord.py
-- Install python-dotenv: pip install python-dotenv
-- Install requests: pip install requests
-- Install boto3: pip install boto3
-- Enter value for BOT_TOKEN in discord/.env.example
-- Run python3 bot.py
-
-# About
-This bot uses the Simplify Github Repository to post internships and job postings to the ACM discord as they open up.
+- Acknowledgements
+    - Developed by Alex Fisher, Jason Tenczar, Steve Sajeev, Jacob Frankel, and Alex Milanes
