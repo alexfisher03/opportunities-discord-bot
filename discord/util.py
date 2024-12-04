@@ -64,5 +64,19 @@ def sortListings(listings):
     return listings
 
 
-def filterSummer(listings, year, earliest_date):
-    return [listing for listing in listings if listing["is_visible"] and any(f"Summer {year}" in item for item in listing["terms"]) and listing['date_posted'] > earliest_date]
+#def filterSummer(listings, year, earliest_date):
+    #return [listing for listing in listings if listing["is_visible"] and any(f"Summer {year}" in item for item in listing["terms"]) and listing['date_posted'] > earliest_date]
+
+
+def filterSummer(listings, year, earliest_date=0):
+    filtered = []
+    for listing in listings:
+        # Check if date_posted is after earliest_date
+        date_posted = int(listing["date_posted"])
+        if date_posted >= earliest_date:
+            # Check if any term contains the specified year
+            if any(year in term for term in listing["terms"]):
+                filtered.append(listing)
+
+ 
+    return filtered

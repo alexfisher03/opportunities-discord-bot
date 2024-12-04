@@ -1,12 +1,11 @@
 import discord
 from discord.ext import commands, tasks
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 import requests
 from bs4 import BeautifulSoup
 import os
 from dotenv import load_dotenv
 import util
-import datetime
 
 
 # Set TEST_MODE to True for testing (loads dummy data)
@@ -18,7 +17,7 @@ file = open("logging.txt","a")
 
 
 # Define times for the loop (use 12:00 UTC daily for production)
-times = [time(hour=12, minute=0, second=0)]
+times = [time(hour=2, minute=15, second=0)]
 
 
 class PostListings(commands.Cog):
@@ -29,7 +28,7 @@ class PostListings(commands.Cog):
 
 
     def log_message(self, message):
-        timestamp = datetime.datetime.now().strftime("[%m/%d|%H:%M:%S]")
+        timestamp = datetime.now().strftime("[%m/%d|%H:%M:%S]")
         print(f"{timestamp} {message}",file=file, flush = True)
         print(f"{timestamp} {message}")
 
@@ -224,14 +223,21 @@ class PostListings(commands.Cog):
             ]
         else:
             listings = util.getDataFromJSON("listings.json")
+            self.log_message(f"Number of listings succesfully fetched from S3: {len(listings)}") 
 
         try:
-            print(listings)
             util.sortListings(listings)
             today = datetime.now()
-            yesterday_midnight = datetime(today.year, today.month, today.day)
-            earliest_date = int(yesterday_midnight.timestamp()) if not TEST_MODE else 0
+            # Subtract one day to get the previous day
+            previous_day = today - timedelta(days=1)
+            # Create a datetime object for 9 PM (21:00) on the previous day
+            nine_pm_previous_day = datetime(previous_day.year, previous_day.month, previous_day.day, 21, 0, 0)
+            # Convert to UNIX timestamp
+            earliest_date = int(nine_pm_previous_day.timestamp()) if not TEST_MODE else 0
+            self.log_message("UNIX timestamp for earliest_date"+str(earliest_date))
+
             listings = util.filterSummer(listings, "2025", earliest_date=earliest_date)
+
         except Exception as e:
             self.log_message("Error sorting listings! " + str(e))
 
@@ -383,9 +389,8 @@ class PostListings(commands.Cog):
 
     @post_listings.before_loop
     async def before_post_listings(self):
-        self.log_message("Waiting until bot is ready...")
         await self.bot.wait_until_ready()
-        self.log_message("Bot is ready! Starting post_listings loop.")
+        self.log_message("Bot is ready! Wating for 9:15EST...")
 
 
 async def setup(bot):
