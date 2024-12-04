@@ -385,7 +385,8 @@ class PostListings(commands.Cog):
             return "UNKNOWN"
 
         season = get_season(today.month)
-        return f"{season} {today.year % 100}: {today.strftime('%B %d')}"
+        adjusted_date = today - timedelta(days=1)
+        return f"{season} {adjusted_date.year % 100}: {adjusted_date.strftime('%B %d')}"
 
     @post_listings.before_loop
     async def before_post_listings(self):
