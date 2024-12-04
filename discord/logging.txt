@@ -1,0 +1,94 @@
+[12/02 , 14::44::59] Waiting until bot is ready...
+[12/02 , 14::45::02] Bot is ready! Starting post_listings loop.
+[12/02 , 14::45::02] Running post_listings loop...,
+[12/02 , 14:45:58] Waiting until bot is ready...
+[12/02 , 14:46:01] Bot is ready! Starting post_listings loop.
+[12/02 , 14:46:01] Running post_listings loop...,
+[12/02|14:47:52] Waiting until bot is ready...
+[12/02|14:47:55] Bot is ready! Starting post_listings loop.
+[12/02|14:47:55] Running post_listings loop...,
+[12/02|14:47:55] Test Mode is True
+[12/02|14:48:47] Waiting until bot is ready...
+[12/02|14:48:49] Bot is ready! Starting post_listings loop.
+[12/02|14:48:50] Running post_listings loop...,
+[12/02|14:48:50] Test Mode is True
+[12/02|14:51:10] Waiting until bot is ready...
+[12/02|14:51:13] Bot is ready! Starting post_listings loop.
+[12/02|14:51:13] Running post_listings loop...,
+[12/02|14:51:13] Test Mode is True
+[12/02|14:56:05] Waiting until bot is ready...
+[12/02|14:56:08] Bot is ready! Starting post_listings loop.
+[12/02|14:56:08] ____Running post_listings loop____
+[12/02|14:56:08] Test Mode is True
+[12/02|14:56:47] Waiting until bot is ready...
+[12/02|14:56:50] Bot is ready! Starting post_listings loop.
+[12/02|14:56:50] ____Running post_listings loop____
+[12/02|14:56:50] Test Mode is True
+[12/03|17:05:14] Bot is ready! Starting post_listings loop.
+[12/03|17:05:14] ____Running post_listings loop____
+[12/03|17:05:14] Test Mode is True
+[12/03|17:05:15] Posting in the following guilds...
+[12/03|17:05:15] [{'id': 1300902099437096960, 'channel': 1303808546600783872}, {'id': 785998200070471700, 'channel': 1308135747211104348}]
+[12/03|17:05:15] Thread created: https://discord.com/channels/1300902099437096960/1313627138569539745
+[12/03|17:05:16] Sent 10 embeds in a batch.
+[12/03|17:05:16] Sent 3 embeds in the final batch.
+[12/03|17:05:16] Thread created: https://discord.com/channels/785998200070471700/1313627141799411803
+[12/03|17:05:17] Sent 10 embeds in a batch.
+[12/03|17:05:17] Sent 3 embeds in the final batch.
+[12/03|17:05:19] Skipping post: already posted today in TEST_MODE.
+[12/03|17:05:24] Skipping post: already posted today in TEST_MODE.
+[12/03|17:07:31] Bot is ready! Starting post_listings loop.
+[12/03|17:09:07] Bot is ready! Starting post_listings loop.
+[12/03|17:10:00] ____Running post_listings loop____
+[12/03|17:10:00] Test Mode is False
+[12/03|17:10:17] No listings to post.
+[12/03|17:12:39] Bot is ready! Starting post_listings loop.
+[12/03|17:14:00] ____Running post_listings loop____
+[12/03|17:14:00] Test Mode is False
+[12/03|17:14:11] Number of listings succesfully fetched from S3: 6752
+[12/03|17:14:11] No listings to post.
+[12/03|17:22:56] Bot is ready! Starting post_listings loop.
+[12/03|17:24:00] ____Running post_listings loop____
+[12/03|17:24:00] Test Mode is False
+[12/03|17:24:01] Number of listings succesfully fetched from S3: 6752
+[12/03|17:24:01] No listings to post.
+[12/03|17:32:32] Bot is ready! Starting post_listings loop.
+[12/03|17:33:00] ____Running post_listings loop____
+[12/03|17:33:00] Test Mode is False
+[12/03|17:33:01] Number of listings succesfully fetched from S3: 6752
+[12/03|17:33:01] No listings to post.
+[12/03|17:39:24] Bot is ready! Starting post_listings loop.
+[12/03|17:40:00] ____Running post_listings loop____
+[12/03|17:40:00] Test Mode is False
+[12/03|17:40:01] Number of listings succesfully fetched from S3: 6752
+[12/03|17:40:01] Error sorting listings! 'PostListings' object has no attribute 'log_lessage'
+[12/03|17:41:09] Bot is ready! Starting post_listings loop.
+[12/03|17:42:00] ____Running post_listings loop____
+[12/03|17:42:00] Test Mode is False
+[12/03|17:42:00] Number of listings succesfully fetched from S3: 6752
+[12/03|17:42:00] Length after sortListings 6752
+[12/03|17:42:00] UNIX timestamp for earliest_date1733202000
+[12/03|17:42:00] No listings to post.
+[12/03|17:43:37] Bot is ready! Starting post_listings loop.
+[12/03|17:44:00] ____Running post_listings loop____
+[12/03|17:44:00] Test Mode is False
+[12/03|17:44:04] Number of listings succesfully fetched from S3: 6752
+[12/03|17:44:04] Length after sortListings 6752
+[12/03|17:44:04] UNIX timestamp for earliest_date1733202000
+[12/03|17:44:04] No listings to post.
+[12/03|17:55:07] Bot is ready! Starting post_listings loop.
+[12/03|17:56:00] ____Running post_listings loop____
+[12/03|17:56:00] Test Mode is False
+[12/03|17:56:04] Number of listings succesfully fetched from S3: 6765
+[12/03|17:56:04] Error sorting listings! name 'timedelta' is not defined
+[12/03|17:56:42] Bot is ready! Starting post_listings loop.
+[12/03|17:57:00] ____Running post_listings loop____
+[12/03|17:57:00] Test Mode is False
+[12/03|17:57:01] Number of listings succesfully fetched from S3: 6765
+[12/03|17:57:01] UNIX timestamp for earliest_date1733191200
+[12/03|17:57:01] Posting in the following guilds...
+[12/03|17:57:01] [{'id': 1300902099437096960, 'channel': 1303808546600783872}, {'id': 785998200070471700, 'channel': 1308135747211104348}]
+[12/03|17:57:01] Thread created: https://discord.com/channels/1300902099437096960/1313640165734092802
+[12/03|17:57:02] Sent 7 embeds in the final batch.
+[12/03|17:57:02] Thread created: https://discord.com/channels/785998200070471700/1313640168132972544
+[12/03|17:57:02] Sent 7 embeds in the final batch.

@@ -15,16 +15,21 @@ import json
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
 AWS_SECRET = os.getenv("AWS_SECRET")
 
-s3 = boto3.client("s3", aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET)
+s3 = boto3.client("s3",region_name = "us-east-2", aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET)
 bucket_name = "acm-github-data"
 
 
 def getDataFromJSON(filename):
-    response = s3.get_object(Bucket=bucket_name, Key=filename)
-    return json.loads(response['Body'].read().decode('utf-8'))
+    try:
+        response = s3.get_object(Bucket=bucket_name, Key=filename)
+        data = response['Body'].read().decode('utf-8')
+        return json.loads(data)
+    except Exception as e:
+        print(f"Error retrieving {filename} from S3: {e}")
+        return None 
 
 def saveDataToJSON(filename, data):
-    s3.put_object(Body=data, Bucket=bucket_name, Key=filename)
+    s3.put_object(Body=json.dumps(data), Bucket=bucket_name, Key=filename)
 
 
 def sortListings(listings):
@@ -59,5 +64,19 @@ def sortListings(listings):
     return listings
 
 
-def filterSummer(listings, year, earliest_date):
-    return [listing for listing in listings if listing["is_visible"] and any(f"Summer {year}" in item for item in listing["terms"]) and listing['date_posted'] > earliest_date]
+#def filterSummer(listings, year, earliest_date):
+    #return [listing for listing in listings if listing["is_visible"] and any(f"Summer {year}" in item for item in listing["terms"]) and listing['date_posted'] > earliest_date]
+
+
+def filterSummer(listings, year, earliest_date=0):
+    filtered = []
+    for listing in listings:
+        # Check if date_posted is after earliest_date
+        date_posted = int(listing["date_posted"])
+        if date_posted >= earliest_date:
+            # Check if any term contains the specified year
+            if any(year in term for term in listing["terms"]):
+                filtered.append(listing)
+
+ 
+    return filtered
