@@ -230,8 +230,8 @@ class PostListings(commands.Cog):
             today = datetime.now()
             # Subtract one day to get the previous day
             previous_day = today - timedelta(days=1)
-            # Create a datetime object for 9 PM (21:00) on the previous day
-            nine_pm_previous_day = datetime(previous_day.year, previous_day.month, previous_day.day, 21, 0, 0)
+            # Create a datetime object for 9 PM (21:00) on the previous day set to 2 bc of EC2 being on UTC time
+            nine_pm_previous_day = datetime(previous_day.year, previous_day.month, previous_day.day, 2, 0, 0)
             # Convert to UNIX timestamp
             earliest_date = int(nine_pm_previous_day.timestamp()) if not TEST_MODE else 0
             self.log_message("UNIX timestamp for earliest_date"+str(earliest_date))
@@ -385,7 +385,8 @@ class PostListings(commands.Cog):
             return "UNKNOWN"
 
         season = get_season(today.month)
-        return f"{season} {today.year % 100}: {today.strftime('%B %d')}"
+        adjusted_date = today - timedelta(days=1)
+        return f"{season} {adjusted_date.year % 100}: {adjusted_date.strftime('%B %d')}"
 
     @post_listings.before_loop
     async def before_post_listings(self):
