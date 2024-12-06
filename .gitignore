@@ -1,5 +1,6 @@
 venv/
 packages/
+discord/logging.txt
 packages.zip
 .env
 __pycache__/
