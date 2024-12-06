@@ -256,6 +256,10 @@ class PostListings(commands.Cog):
 
         for guild in existing_guilds:
 
+            #TODO replace with role_id for specific server once scaling
+            role_id = 1314054737863245986 #this is the ping ID for the UF ACM server
+            role_mention = f"<@&{role_id}>"
+
             forum_channel = self.bot.get_channel(guild['channel'])
 
             if not forum_channel:
@@ -268,7 +272,7 @@ class PostListings(commands.Cog):
             try:
                 thread_with_message = await forum_channel.create_thread(
                     name=thread_title,
-                    content=f"Job listings for {thread_title}:"
+                    content=f"{role_mention} New internships posted for {thread_title}:"
                 )
                 thread = thread_with_message.thread  # Extract the thread object
                 self.log_message(f"Thread created: {thread.jump_url}")
